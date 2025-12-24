@@ -14,6 +14,14 @@ public class Customer {
         this.totalPurchases = totalPurchases;
         this.points = points;
     }
+    //Default constructor
+    public Customer() {
+        this.customerID = 0;
+        this.fullName = "Customer";
+        this.membershipLevel = "Regular";
+        this.totalPurchases = 0.0;
+        this.points = 0;
+    }
 
     //Getters
     public int getCustomerID() {
@@ -67,6 +75,10 @@ public class Customer {
                 membershipLevel = "Silver";
             }
         }
+    }
+
+    public boolean isVIP() {
+        return "Gold".equalsIgnoreCase(membershipLevel) || points >= 200;
     }
 
     public double getDiscountRate() {

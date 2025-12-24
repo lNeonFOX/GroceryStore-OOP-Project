@@ -13,8 +13,17 @@ public Product(int productID, String name, double price, int stockQuantity, Stri
     this.stockQuantity = stockQuantity;
     this.category = category;
 }
+    //default constructor
+    public Product() {
+        this.productID = 0;
+        this.name = "Unknown";
+        this.price = 0.0;
+        this.stockQuantity = 0;
+        this.category = "General";
+    }
 
-//getters
+
+    //getters
 public int getProductID() {
     return productID;
     }
@@ -63,13 +72,19 @@ public boolean sell(int amount){
     return true;
 }
 
+    public void applyDiscount(double percentage) {
+        if (percentage <= 0 || percentage >= 100) return;
+        price = price * (1 - percentage / 100.0);
+    }
+
 //ToString
     @Override
     public String toString() {
-    return "Product{productID" + productID +
+        return "Product{productId=" + productID +
             ", name='" + name + '\'' +
             ", price=" + price +
             ", stockQuantity=" + stockQuantity +
+            ", category='" + category + '\'' +
             '}';
+        }
     }
-}
