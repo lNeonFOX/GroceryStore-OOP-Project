@@ -8,11 +8,11 @@ public class Customer {
 
     //Constructor
     public Customer(int customerID, String fullName, String membershipLevel, double totalPurchases, int points) {
-        this.customerID = customerID;
-        this.fullName = fullName;
-        this.membershipLevel = membershipLevel;
-        this.totalPurchases = totalPurchases;
-        this.points = points;
+        setCustomerID(customerID);
+        setFullName(fullName);
+        setMembershipLevel(membershipLevel);
+        setTotalPurchases(totalPurchases);
+        setPoints(points);
     }
     //Default constructor
     public Customer() {
@@ -36,20 +36,25 @@ public class Customer {
     public double getTotalPurchases() {
         return totalPurchases;
     }
-    public int getPoints() {
-        return points;
-    }
+    public int getPoints() { return points; }
 
     //Setters
     public void setCustomerID(int customerID) {
+        if (customerID <= 0) return;
         this.customerID = customerID;
     }
     public void setFullName(String fullName) {
+        if (fullName == null || fullName.trim().isEmpty()) return;
         this.fullName = fullName;
     }
     public void setMembershipLevel(String membershipLevel) {
-        this.membershipLevel = membershipLevel;
+        if (membershipLevel == null) return;
+        membershipLevel = membershipLevel.trim();
+        if (membershipLevel.equals("Regular") || membershipLevel.equals("Silver") || membershipLevel.equals("Gold")) {
+            this.membershipLevel = membershipLevel;
+        }
     }
+
     public void setTotalPurchases(double totalPurchases) {
         if (totalPurchases < 0) return;
         this.totalPurchases = totalPurchases;
@@ -71,14 +76,14 @@ public class Customer {
             membershipLevel = "Gold";
         } else if (totalPurchases >= 50000) {
             // Upgrade to Silver only if not already Gold
-            if (!"Gold".equalsIgnoreCase(membershipLevel)) {
+            if (!membershipLevel.equals("Gold")) {
                 membershipLevel = "Silver";
             }
         }
     }
 
     public boolean isVIP() {
-        return "Gold".equalsIgnoreCase(membershipLevel) || points >= 200;
+        return membershipLevel.equals("Gold") || points >= 200;
     }
 
     public double getDiscountRate() {

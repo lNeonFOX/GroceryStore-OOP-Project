@@ -1,101 +1,223 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Main {
+    static Scanner scanner = new Scanner(System.in);
+    private static ArrayList<Product> products = new ArrayList<>();
+    private static ArrayList<Customer> customers = new ArrayList<>();
+    private static ArrayList<Sale> sales = new ArrayList<>();
+
     public static void main(String[] args) {
-        System.out.println("=== Grocery Store Management System ===");
-        System.out.println();
+        System.out.println("=== Grocery Store Management System ===\n");
 
         //objects
-        Product p1 = new Product(101, "Milk 1L", 550.0, 10, "Dairy");
-        Product p2 = new Product(102, "Bread", 200.0, 5, "Bakery");
-        Product p3 = new Product(); // default
+        products.add(new Product(101, "Milk 1L", 550.0, 10, "Diary"));
+        products.add(new Product(102, "Bread", 500.0, 20, "Bakery"));
+        products.add(new Product(103, "Potato 1kg", 280.0, 30, "Vegetables"));
 
-        Customer c1 = new Customer(1, "Aruzhan S.", "Regular", 12000.0, 10);
-        Customer c2 = new Customer();
+        customers.add(new Customer(1, "Aruzhan S.", "Regular", 12000.0, 10));
+        customers.add(new Customer(2, "Daria A", "Gold", 100000.0, 200));
 
-        Sale s1 = new Sale(9001, c1.getCustomerID(), 0.0, "2025-12-17", "OPEN");
+        sales.add(new Sale(9000, 1, 2.0, "2026-09.01", "OPEN"));
 
-        // 3) Display all objects
-        System.out.println("--- PRODUCTS ---");
-        System.out.println(p1);
-        System.out.println(p2);
-        System.out.println(p3);
+        boolean running = true;
+        while (running) {
+            displayMenu(); // Show menu options
+            int choice = scanner.nextInt(); // Read user's choice
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    addProduct();
+                    break;
+                case 2:
+                    viewAllProducts();
+                    break;
+                case 3:
+                    addCustomer();
+                    break;
+                case 4:
+                    viewAllCustomers();
+                    break;
+                case 5:
+                    createSale();
+                    break;
+                case 6:
+                    viewAllSales();
+                    break;
+                case 0:
+                    System.out.println("\nGoodbye! ");
+                    running = false; // Exit loop
+                    break;
+                default:
+                    System.out.println("\n Invalid choice!");
+            }
+            if (running) {
+                System.out.println("\nPress Enter to continue...");
+                scanner.nextLine(); // Wait for user
+            }
+        }
+        scanner.close(); // Clean up
+    } // End of main method
+
+    private static void displayMenu() {
+        System.out.println("\n========================================");
+        System.out.println("\n--- MENU ---");
+        System.out.println("1. Add Product");
+        System.out.println("2. View All Products");
+        System.out.println("3. Add Customer");
+        System.out.println("4. View All Customers");
+        System.out.println("5. Create Sale (OPEN)");
+        System.out.println("6. View All Sales");
+        System.out.println("0. Exit");
+        System.out.println("========================================");
+        System.out.print("Enter your choice: ");
+    }
+
+    private static void addProduct() {
+        System.out.println("\n--- ADD PRODUCT ---");
+
+        System.out.print("Enter product ID ");
+        int productID = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Enter product name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter product price: ");
+        double price = scanner.nextDouble();
+
+        System.out.print("Enter stock quantity: ");
+        int stockQuantity = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Enter Category name: ");
+        String category = scanner.nextLine();
+
+        Product p = new Product(productID, name, price, stockQuantity, category);
+        products.add(p);
+
+        System.out.println("\n Product added successfully!");
+    }
+
+    private static void viewAllProducts() {
+        System.out.println("\n========================================");
+        System.out.println(" ALL PRODUCTS");
+        System.out.println("========================================");
+
+        if (products.isEmpty()) {
+            System.out.println("No products found.");
+            return;
+        }
+
+        System.out.println("Total items: " + products.size());
         System.out.println();
 
-        System.out.println("--- CUSTOMERS ---");
-        System.out.println(c1);
-        System.out.println(c2);
+        for (int i = 0; i < products.size(); i++) {
+            Product p = products.get(i);
+
+            System.out.println((i + 1) + ". " + p.getName() + "- " + p.getPrice());
+            System.out.println(" Category: " + p.getCategory());
+            System.out.println(" Available: " + p.getStockQuantity());
+            System.out.println();
+        }
+    }
+
+    private static void addCustomer() {
+        System.out.println("\n--- ADD CUSTOMER ---");
+
+        System.out.print("Enter customer ID ");
+        int CustomerID = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Enter full name: ");
+        String fullName = scanner.nextLine();
+
+        System.out.print("Enter membership level: ");
+        String membershipLevel = scanner.nextLine();
+
+        System.out.print("Enter total purchases: ");
+        double totalPurchases = scanner.nextDouble();
+
+        System.out.print("Enter number of points: ");
+        int points = scanner.nextInt();
+
+        Customer c = new Customer(CustomerID, fullName, membershipLevel, totalPurchases, points);
+        customers.add(c);
+
+        System.out.println("\n Customer added successfully!");
+    }
+
+    private static void viewAllCustomers() {
+        System.out.println("\n========================================");
+        System.out.println(" ALL CUSTOMERS");
+        System.out.println("========================================");
+
+        if (customers.isEmpty()) {
+            System.out.println("No customers found.");
+            return;
+        }
+
+        System.out.println("Total customers: " + customers.size());
         System.out.println();
 
-        System.out.println("--- SALES ---");
-        System.out.println(s1);
+        for (int i = 0; i < customers.size(); i++) {
+            Customer c = customers.get(i);
+
+            System.out.println((i + 1) + ". " + c.getCustomerID() + "- " + c.getFullName());
+            System.out.println(" Total purchases: " + c.getTotalPurchases());
+            System.out.println(" Membership Level: " + c.getMembershipLevel());
+            System.out.println(" Points: " + c.getPoints());
+            System.out.println();
+        }
+    }
+
+    private static void createSale() {
+        System.out.println("\n--- ADD SALE ---");
+
+        System.out.print("Enter SALE ID ");
+        int saleID = scanner.nextInt();
+
+        System.out.print("Enter customer ID: ");
+        int customerID = scanner.nextInt();
+
+        System.out.print("Enter total amount: ");
+        double totalAmount = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.print("Enter date: ");
+        String date = scanner.nextLine();
+
+        System.out.print("Enter Status: ");
+        String status = scanner.nextLine();
+
+        Sale s = new Sale(saleID, customerID, totalAmount, date, status);
+        sales.add(s);
+
+        System.out.println("\n Sale created successfully!");
+    }
+
+    private static void viewAllSales() {
+        System.out.println("\n========================================");
+        System.out.println(" ALL SALES");
+        System.out.println("========================================");
+
+        if (sales.isEmpty()) {
+            System.out.println("No sales found.");
+            return;
+        }
+
+        System.out.println("Total items: " + sales.size());
         System.out.println();
 
-        //Test getters
-        System.out.println("\n--- TESTING GETTERS ---");
-        System.out.println("Product 1 name: " + p1.getName());
-        System.out.println("Product 1 stock: " + p1.getStockQuantity());
-        System.out.println("Customer 1 discount rate: " + (c1.getDiscountRate() * 100) + "%");
-        System.out.println("Sale 1 status: " + s1.getStatus());
+        for (int i = 0; i < sales.size(); i++) {
+            Sale s = sales.get(i);
 
-        //Test setters
-        System.out.println("\n--- TESTING SETTERS ---");
-        System.out.println("Updating default product (p3)...");
-        p3.setProductID(103);
-        p3.setName("Apples 1kg");
-        p3.setPrice(800.0);
-        p3.setStockQuantity(20);
-        p3.setCategory("Fruits");
-        System.out.println("Updated p3: " + p3);
-
-        System.out.println("\nUpdating default customer (c2)...");
-        c2.setCustomerID(2);
-        c2.setFullName("Dias K.");
-        c2.setMembershipLevel("Silver");
-        c2.setTotalPurchases(60000.0);
-        c2.setPoints(120);
-        System.out.println("Updated c2: " + c2);
-
-        //Test additional methods
-        System.out.println("\n--- TESTING PRODUCT METHODS ---");
-        System.out.println(p1.getName() + " in stock: " + p1.isInStock());
-        System.out.println("Selling 3 of " + p1.getName());
-        System.out.println("Sold: " + p1.sell(3) + ", new stock: " + p1.getStockQuantity());
-        System.out.println("Restocking 5 of " + p2.getName());
-        p2.restock(5);
-        System.out.println(p2.getName() + " new stock: " + p2.getStockQuantity());
-        System.out.println("Applying 10% discount to " + p3.getName());
-        p3.applyDiscount(10);
-        System.out.println(p3.getName() + " new price: " + p3.getPrice());
-
-        System.out.println("\n--- TESTING CUSTOMER METHODS ---");
-        System.out.println(c1.getFullName() + " VIP: " + c1.isVIP());
-        System.out.println("Adding purchase 45000 to " + c1.getFullName());
-        c1.addPurchase(45000);
-        System.out.println("Updated customer: " + c1);
-        System.out.println(c1.getFullName() + " VIP: " + c1.isVIP());
-
-        System.out.println("\n--- TESTING SALE METHODS ---");
-        System.out.println("Sale open: " + s1.isOpen());
-        System.out.println("Adding items to sale...");
-        s1.addItem(p1, 2);
-        s1.addItem(p3, 4);
-        System.out.println("Sale total now: " + s1.getTotalAmount());
-        s1.completeSale();
-        System.out.println("Sale after completion: " + s1);
-
-        //Final state
-        System.out.println("\n--- FINAL STATE ---");
-        System.out.println("Products:");
-        System.out.println(p1);
-        System.out.println(p2);
-        System.out.println(p3);
-
-        System.out.println("\nCustomers:");
-        System.out.println(c1);
-        System.out.println(c2);
-
-        System.out.println("\nSales:");
-        System.out.println(s1);
-
-        System.out.println("\n=== Program Complete ===");
+            System.out.println((i + 1) + ". " + s.getSaleID() + "  " + s.getCustomerID());
+            System.out.println(" Date: " + s.getDate());
+            System.out.println(" Total Amount: " + s.getTotalAmount());
+            System.out.println(" Status: " + s.getStatus());
+            System.out.println();
+        }
     }
 }

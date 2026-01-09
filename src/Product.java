@@ -7,11 +7,11 @@ public class Product {
 
     //constructor
 public Product(int productID, String name, double price, int stockQuantity, String category) {
-    this.productID = productID;
-    this.name = name;
-    this.price = price;
-    this.stockQuantity = stockQuantity;
-    this.category = category;
+    setProductID(productID);
+    setName(name);
+    setPrice(price);
+    setStockQuantity(stockQuantity);
+    setCategory(category);
 }
     //default constructor
     public Product() {
@@ -42,18 +42,23 @@ public String getCategory() {
 
 //setters
 public void setProductID(int productID) {
+    if(productID <= 0) return;
     this.productID = productID;
 }
 public void setName(String name) {
-    this.name = name;
+    if (name == null || name.trim().isEmpty()) return;
+    this.name = name.trim();
 }
 public void setPrice(double price) {
+    if (price < 0) return;
     this.price = price;
 }
 public void setStockQuantity(int stockQuantity) {
+    if (stockQuantity < 0) return;
     this.stockQuantity = stockQuantity;
 }
 public void setCategory(String category) {
+    if (category == null || category.trim().isEmpty()) return;
     this.category = category;
 }
 
@@ -65,7 +70,7 @@ public void restock(int amount){
     if (amount <= 0) return;
     stockQuantity += amount;
 }
-public boolean sell(int amount){
+public boolean sell(int amount) {
     if (amount <= 0) return false;
     if (amount > stockQuantity) return false;
     stockQuantity -= amount;

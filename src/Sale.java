@@ -5,13 +5,13 @@ public class Sale {
     private String date;
     private String status;
 
-    // Constructor with parameters
+    // Constructor
     public Sale(int saleID, int customerID, double totalAmount, String date, String status) {
-        this.saleID = saleID;
-        this.customerID = customerID;
-        this.totalAmount = totalAmount;
-        this.date = date;
-        this.status = status;
+    setSaleID(saleID);
+    setCustomerID(customerID);
+    setTotalAmount(totalAmount);
+    setDate(date);
+    setStatus(status);
     }
     //Default constructor
     public Sale() {
@@ -41,9 +41,11 @@ public class Sale {
 
     //Setters
     public void setSaleID(int saleID) {
+        if (saleID <= 0) return;
         this.saleID = saleID;
     }
     public void setCustomerID(int customerID) {
+        if (customerID <= 0) return;
         this.customerID = customerID;
     }
     public void setTotalAmount(double totalAmount) {
@@ -51,15 +53,20 @@ public class Sale {
         this.totalAmount = totalAmount;
     }
     public void setDate(String date) {
-        this.date = date;
+        if (date == null || date.trim().isEmpty()) return;
+        this.date = date.trim();
     }
     public void setStatus(String status) {
-        this.status = status;
+        if (status == null) return;
+        status = status.trim();
+        if (status.equals("OPEN") || status.equals("COMPLETED") || status.equals("CANCELLED")) {
+            this.status = status;
+        }
     }
 
     //logic
     public boolean isOpen() {
-        return "OPEN".equals(status);
+        return status.equals("OPEN");
     }
 
     public void addItem(Product product, int qty) {
@@ -73,7 +80,7 @@ public class Sale {
     }
 
     public void completeSale() {
-        if (!"CANCELLED".equals(status)) {
+        if (!status.equals("CANCELLED")) {
             status = "COMPLETED";
         }
     }
