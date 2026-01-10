@@ -1,9 +1,9 @@
 public class Customer {
-    private int customerID;
-    private String fullName;
-    private String membershipLevel;
-    private double totalPurchases;
-    private int points;
+    protected int customerID;
+    protected String fullName;
+    protected String membershipLevel;
+    protected double totalPurchases;
+    protected int points;
 
 
     //Constructor

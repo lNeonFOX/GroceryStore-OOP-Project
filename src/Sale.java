@@ -1,9 +1,9 @@
 public class Sale {
-    private int saleID;
-    private int customerID;
-    private double totalAmount;
-    private String date;
-    private String status;
+    protected int saleID;
+    protected int customerID;
+    protected double totalAmount;
+    protected String date;
+    protected String status;
 
     // Constructor
     public Sale(int saleID, int customerID, double totalAmount, String date, String status) {
