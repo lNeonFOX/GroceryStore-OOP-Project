@@ -1,4 +1,6 @@
-public class Product {
+package model;
+
+public abstract class Product {
     protected int productID;
     protected String name;
     protected double price;
@@ -47,38 +49,45 @@ public class Product {
 
     //setters
     public void setProductID(int productID) {
-        if (productID <= 0) return;
+        if (productID <= 0) {
+            throw new IllegalArgumentException("Product ID must be > 0");
+        }
         this.productID = productID;
     }
 
     public void setName(String name) {
-        if (name == null || name.trim().isEmpty()) return;
-        this.name = name.trim();
+        if (name == null || name.trim().isEmpty()){
+         throw new IllegalArgumentException("Name cannot be empty");
+        }
+        this.name = name;
     }
 
     public void setPrice(double price) {
-        if (price < 0) return;
+        if (price < 0){
+            throw new IllegalArgumentException("Price cannot be negative");
+        }
         this.price = price;
     }
 
     public void setStockQuantity(int stockQuantity) {
-        if (stockQuantity < 0) return;
+        if (stockQuantity < 0){
+            throw new IllegalArgumentException("Stock quantity cannot be less than 0");
+        }
         this.stockQuantity = stockQuantity;
     }
 
     public void setCategory(String category) {
-        if (category == null || category.trim().isEmpty()) return;
+        if (category == null || category.trim().isEmpty()){
+            throw new IllegalArgumentException("Category name cannot be empty");
+        }
         this.category = category;
     }
 
-    public void handle() {
-        System.out.println(name + " is being handled like a regular product.");
-    }
+    // ABSTRACT METHODS
+    public abstract void handle();
+    public abstract String getType();
 
-    public String getType() {
-        return "Product";
-    }
-
+    // CONCRETE METHOD
     public double getFinalPrice() {
         return price;
     }

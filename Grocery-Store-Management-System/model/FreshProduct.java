@@ -1,23 +1,29 @@
+package model;
+
 public class FreshProduct extends Product {
     private int daysToExpire;
     private boolean refrigerated;
 
-    public FreshProduct(int productId, String name, double price, int stockQuantity, String category,
-                        int daysToExpire, boolean refrigerated) {
+    public FreshProduct(int productId, String name, double price, int stockQuantity, String category, int daysToExpire, boolean refrigerated) {
         super(productId, name, price, stockQuantity, category);
         setDaysToExpire(daysToExpire);
         this.refrigerated = refrigerated;
     }
+
     public int getDaysToExpire() { return daysToExpire; }
     public boolean isRefrigerated() { return refrigerated; }
 
     public void setDaysToExpire(int daysToExpire) {
-        if (daysToExpire < 0) return;
+        if (daysToExpire < 0){
+            throw new IllegalArgumentException("Product Expired" + daysToExpire);
+        }
         this.daysToExpire = daysToExpire;
     }
+
     public void setRefrigerated(boolean refrigerated) {
         this.refrigerated = refrigerated;
     }
+
     @Override
     public void handle() {
         if (refrigerated) {

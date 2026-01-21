@@ -1,17 +1,20 @@
+package menu;
+
+import model.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {
+public class MenuManager implements Menu {
     static Scanner scanner = new Scanner(System.in);
     private static ArrayList<Product> inventory = new ArrayList<>();
     private static ArrayList<Customer> customers = new ArrayList<>();
     private static ArrayList<Sale> sales = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public MenuManager() {
         System.out.println("=== Grocery Store Management System ===\n");
 
         //objects
-        inventory.add(new Product(100, "Sugar", 450.0, 20, "Baking"));
+        inventory.add(new BasicProduct(100, "Sugar", 450.0, 20, "Baking"));
         inventory.add(new FreshProduct(101, "Milk 1L", 550.0, 10, "Dairy", 2, true));
         inventory.add(new PackagedProduct(102, "Pasta", 600.0, 15, "Grocery", 1.0));
 
@@ -19,69 +22,17 @@ public class Main {
         customers.add(new Customer(2, "Daria A", "Gold", 100000.0, 200));
 
         sales.add(new Sale(9000, 1, 2.0, "2026-09.01", "OPEN"));
+    }
 
-        boolean running = true;
-        while (running) {
-            displayMenu(); // Show menu options
-            int choice = scanner.nextInt(); // Read user's choice
-            scanner.nextLine();
-
-            switch (choice) {
-                case 1:
-                    addParentProduct();
-                    break;
-                case 2:
-                    addFreshProduct();
-                    break;
-                case 3:
-                    addPackagedProduct();
-                    break;
-                case 4:
-                    viewAllProducts();
-                    break;
-                case 5:
-                    viewFreshOnly();
-                    break;
-                case 6:
-                    viewPackagedOnly();
-                    break;
-                case 7:
-                    demonstratePolymorphism();
-                    break;
-                case 8:
-                    addCustomer();
-                    break;
-                case 9:
-                    viewAllCustomers();
-                    break;
-                case 10:
-                    createSale();
-                    break;
-                case 11:
-                    viewAllSales();
-                    break;
-                case 0:
-                    System.out.println("\nGoodbye! ");
-                    running = false; // Exit loop
-                    break;
-                default:
-                    System.out.println("\n Invalid choice!");
-            }
-            if (running) {
-                System.out.println("\nPress Enter to continue...");
-                scanner.nextLine(); // Wait for user
-            }
-        }
-        scanner.close(); // Clean up
-    } // End of main method
-
-    private static void displayMenu() {
+    @Override
+    public void displayMenu() {
         System.out.println("\n========================================");
-        System.out.println("\n--- MENU ---");
-        System.out.println("1. Add Product (Parent)");
-        System.out.println("2. Add FreshProduct (Child)");
-        System.out.println("3. Add PackagedProduct (Child)");
-        System.out.println("4. View All Products (Polymorphic)");
+        System.out.println(" GROCERY STORE MANAGEMENT SYSTEM");
+        System.out.println("========================================");
+        System.out.println("1. Add BasicProduct");
+        System.out.println("2. Add FreshProduct");
+        System.out.println("3. Add Packaged Product");
+        System.out.println("4. View All Products (polymorphism)");
         System.out.println("5. View FreshProducts Only");
         System.out.println("6. View PackagedProducts Only");
         System.out.println("7. Demonstrate Polymorphism (handle())");
@@ -95,91 +46,156 @@ public class Main {
         System.out.print("Enter your choice: ");
     }
 
-    private static void addParentProduct() {
-        System.out.println("\n--- ADD PRODUCT (PARENT) ---");
+    @Override
+    public void run() {
+        boolean running = true;
+        while (running) {
+            displayMenu();
+            System.out.print("Enter choice: ");
+            try {
+                int choice = scanner.nextInt();
+                scanner.nextLine();
 
-        System.out.print("Enter product ID ");
-        int productID = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Enter product name: ");
-        String name = scanner.nextLine();
-
-        System.out.print("Enter product price: ");
-        double price = scanner.nextDouble();
-
-        System.out.print("Enter stock quantity: ");
-        int stockQuantity = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Enter Category name: ");
-        String category = scanner.nextLine();
-
-        Product p = new Product(productID, name, price, stockQuantity, category);
-        inventory.add(p);
-
-        System.out.println("\n Product added successfully!");
+                switch (choice) {
+                    case 1:
+                        addParentProduct();
+                        break;
+                    case 2:
+                        addFreshProduct();
+                        break;
+                    case 3:
+                        addPackagedProduct();
+                        break;
+                    case 4:
+                        viewAllProducts();
+                        break;
+                    case 5:
+                        viewFreshOnly();
+                        break;
+                    case 6:
+                        viewPackagedOnly();
+                        break;
+                    case 7:
+                        demonstratePolymorphism();
+                        break;
+                    case 8:
+                        addCustomer();
+                        break;
+                    case 9:
+                        viewAllCustomers();
+                        break;
+                    case 10:
+                        createSale();
+                        break;
+                    case 11:
+                        viewAllSales();
+                        break;
+                    case 0:
+                        System.out.println("\nGoodbye! ");
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("\n Invalid choice!");
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+                scanner.nextLine();
+            }
+        }
+        scanner.close();
     }
 
-    private static void addFreshProduct() {
-        System.out.println("\n--- ADD FRESH PRODUCT ---");
-        System.out.print("Enter product ID ");
-        int productID = scanner.nextInt();
-        scanner.nextLine();
+    private void addParentProduct() {
+        try {
+            System.out.print("Enter product ID ");
+            int productID = scanner.nextInt();
+            scanner.nextLine();
 
-        System.out.print("Enter product name: ");
-        String name = scanner.nextLine();
+            System.out.print("Enter product name: ");
+            String name = scanner.nextLine();
 
-        System.out.print("Enter product price: ");
-        double price = scanner.nextDouble();
+            System.out.print("Enter product price: ");
+            double price = scanner.nextDouble();
 
-        System.out.print("Enter stock quantity: ");
-        int stockQuantity = scanner.nextInt();
-        scanner.nextLine();
+            System.out.print("Enter stock quantity: ");
+            int stockQuantity = scanner.nextInt();
+            scanner.nextLine();
 
-        System.out.print("Enter Category name: ");
-        String category = scanner.nextLine();
+            System.out.print("Enter Category name: ");
+            String category = scanner.nextLine();
 
-        System.out.print("Enter days to expire: ");
-        int daysToExpire = scanner.nextInt();
-
-        System.out.print("Refrigerated? (true/false");
-        boolean refrigerated = scanner.nextBoolean();
-
-        Product p = new FreshProduct(productID, name, price, stockQuantity, category, daysToExpire, refrigerated);
-        inventory.add(p);
-        System.out.println("\nFresh product added successfully!");
+            Product p = new BasicProduct(productID, name, price, stockQuantity, category);
+            inventory.add(p);
+            System.out.println("Basic Product added!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("NO" + e.getMessage());
+        }
     }
 
-    private static void addPackagedProduct() {
-        System.out.print("\n--- ADD PACKAGED PRODUCT ---");
+    private void addFreshProduct() {
+        try {
+            System.out.print("Enter product ID ");
+            int productID = scanner.nextInt();
+            scanner.nextLine();
 
-        System.out.print("Enter product ID ");
-        int productID = scanner.nextInt();
-        scanner.nextLine();
+            System.out.print("Enter product name: ");
+            String name = scanner.nextLine();
 
-        System.out.print("Enter product name: ");
-        String name = scanner.nextLine();
+            System.out.print("Enter product price: ");
+            double price = scanner.nextDouble();
 
-        System.out.print("Enter product price: ");
-        double price = scanner.nextDouble();
+            System.out.print("Enter stock quantity: ");
+            int stockQuantity = scanner.nextInt();
+            scanner.nextLine();
 
-        System.out.print("Enter stock quantity: ");
-        int stockQuantity = scanner.nextInt();
-        scanner.nextLine();
+            System.out.print("Enter Category name: ");
+            String category = scanner.nextLine();
 
-        System.out.print("Enter Category name: ");
-        String category = scanner.nextLine();
+            System.out.print("Enter days to expire: ");
+            int daysToExpire = scanner.nextInt();
 
-        System.out.print("Enter weight: ");
-        double weightKg = scanner.nextDouble();
+            System.out.print("Refrigerated? (true/false");
+            boolean refrigerated = scanner.nextBoolean();
 
-        Product p = new PackagedProduct(productID, name, price, stockQuantity, category, weightKg);
-        inventory.add(p);
-        System.out.println("\nPackaged product added successfully!");
+            Product p = new FreshProduct(productID, name, price, stockQuantity, category, daysToExpire, refrigerated);
+            inventory.add(p);
+            System.out.println("Fresh Product added!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("NO" + e.getMessage());
+        }
     }
 
-    private static void viewAllProducts() {
+    private void addPackagedProduct() {
+        try {
+            System.out.print("Enter product ID ");
+            int productID = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("Enter product name: ");
+            String name = scanner.nextLine();
+
+            System.out.print("Enter product price: ");
+            double price = scanner.nextDouble();
+
+            System.out.print("Enter stock quantity: ");
+            int stockQuantity = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("Enter Category name: ");
+            String category = scanner.nextLine();
+
+            System.out.print("Enter weight: ");
+            double weightKg = scanner.nextDouble();
+
+            Product p = new PackagedProduct(productID, name, price, stockQuantity, category, weightKg);
+            inventory.add(p);
+            System.out.println("\nPackaged product added successfully!");
+        } catch (IllegalArgumentException e) {
+            System.out.println("NO" + e.getMessage());
+        }
+    }
+
+    private void viewAllProducts() {
         System.out.println("\n========================================");
         System.out.println(" ALL PRODUCTS");
         System.out.println("========================================");
@@ -208,7 +224,8 @@ public class Main {
             System.out.println();
         }
     }
-    private static void viewFreshOnly() {
+
+    private void viewFreshOnly() {
         System.out.println("\n--- FRESH PRODUCTS ONLY ---");
         int count = 0;
         for (Product p : inventory) {
@@ -219,6 +236,7 @@ public class Main {
         }
         if (count == 0) System.out.println("No fresh products found.");
     }
+
     private static void viewPackagedOnly() {
         System.out.println("\n--- PACKAGED PRODUCTS ONLY ---");
         int count = 0;
@@ -230,6 +248,7 @@ public class Main {
         }
         if (count == 0) System.out.println("No packaged products found.");
     }
+
     private static void demonstratePolymorphism() {
         System.out.println("\n--- POLYMORPHISM DEMO: handle() ---");
         for (Product p : inventory) {

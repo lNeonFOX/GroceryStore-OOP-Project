@@ -1,3 +1,5 @@
+package model;
+
 public class Sale {
     protected int saleID;
     protected int customerID;
@@ -41,26 +43,28 @@ public class Sale {
 
     //Setters
     public void setSaleID(int saleID) {
-        if (saleID <= 0) return;
+        if (saleID <= 0) throw new IllegalArgumentException("Sale ID cannot be negative");
         this.saleID = saleID;
     }
     public void setCustomerID(int customerID) {
-        if (customerID <= 0) return;
+        if (customerID <= 0) throw new IllegalArgumentException("Customer ID cannot be negative");
         this.customerID = customerID;
     }
     public void setTotalAmount(double totalAmount) {
-        if (totalAmount < 0) return;
+        if (totalAmount < 0) throw new IllegalArgumentException("Total amount cannot be negative");
         this.totalAmount = totalAmount;
     }
     public void setDate(String date) {
-        if (date == null || date.trim().isEmpty()) return;
+        if (date == null || date.trim().isEmpty()) throw new IllegalArgumentException("Date cannot be empty");
         this.date = date.trim();
     }
     public void setStatus(String status) {
-        if (status == null) return;
+        if (status == null) throw new IllegalArgumentException("Status can not be NULL");
         status = status.trim();
         if (status.equals("OPEN") || status.equals("COMPLETED") || status.equals("CANCELLED")) {
             this.status = status;
+        } else {
+            throw new IllegalArgumentException("Status must be OPEN, COMPLETED, or CANCELLED");
         }
     }
 

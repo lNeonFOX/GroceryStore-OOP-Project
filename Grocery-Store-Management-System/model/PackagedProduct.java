@@ -1,3 +1,5 @@
+package model;
+
 public class PackagedProduct extends Product {
     private double weightKg;
 
@@ -11,7 +13,9 @@ public class PackagedProduct extends Product {
     }
 
     public void setWeightKg(double weightKg) {
-        if (weightKg <= 0) return;
+        if (weightKg <= 0) {
+            throw new IllegalArgumentException("Weght cannot be negative!");
+        }
         this.weightKg = weightKg;
     }
     @Override

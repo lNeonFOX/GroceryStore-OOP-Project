@@ -1,3 +1,5 @@
+package model;
+
 public class Customer {
     protected int customerID;
     protected String fullName;
@@ -40,27 +42,31 @@ public class Customer {
 
     //Setters
     public void setCustomerID(int customerID) {
-        if (customerID <= 0) return;
+        if (customerID <= 0) throw new IllegalArgumentException("Customer ID cannot be negative");
         this.customerID = customerID;
     }
+
     public void setFullName(String fullName) {
-        if (fullName == null || fullName.trim().isEmpty()) return;
+        if (fullName == null || fullName.trim().isEmpty()) throw new IllegalArgumentException("Name cannot be empty");
         this.fullName = fullName;
     }
     public void setMembershipLevel(String membershipLevel) {
-        if (membershipLevel == null) return;
+        if (membershipLevel == null) throw new IllegalArgumentException("Membership Level must be set");
         membershipLevel = membershipLevel.trim();
         if (membershipLevel.equals("Regular") || membershipLevel.equals("Silver") || membershipLevel.equals("Gold")) {
             this.membershipLevel = membershipLevel;
+        } else {
+            throw new IllegalArgumentException("Membership level must be Regular, Silver, or Gold");
         }
     }
 
     public void setTotalPurchases(double totalPurchases) {
-        if (totalPurchases < 0) return;
+        if (totalPurchases < 0) throw new IllegalArgumentException("Total purchases cannot be negative");
         this.totalPurchases = totalPurchases;
     }
+
     public void setPoints(int points) {
-        if (points < 0) return;
+        if (points < 0) throw new IllegalArgumentException("Points cannot be negative");
         this.points = points;
     }
 
