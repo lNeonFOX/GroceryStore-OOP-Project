@@ -1,6 +1,8 @@
 package model;
 
-public class Customer {
+import exception.InvalidInputException;
+
+public class Customer implements turnback {
     protected int customerID;
     protected String fullName;
     protected String membershipLevel;
@@ -16,6 +18,7 @@ public class Customer {
         setTotalPurchases(totalPurchases);
         setPoints(points);
     }
+
     //Default constructor
     public Customer() {
         this.customerID = 0;
@@ -29,16 +32,22 @@ public class Customer {
     public int getCustomerID() {
         return customerID;
     }
+
     public String getFullName() {
         return fullName;
     }
+
     public String getMembershipLevel() {
         return membershipLevel;
     }
+
     public double getTotalPurchases() {
         return totalPurchases;
     }
-    public int getPoints() { return points; }
+
+    public int getPoints() {
+        return points;
+    }
 
     //Setters
     public void setCustomerID(int customerID) {
@@ -50,6 +59,7 @@ public class Customer {
         if (fullName == null || fullName.trim().isEmpty()) throw new IllegalArgumentException("Name cannot be empty");
         this.fullName = fullName;
     }
+
     public void setMembershipLevel(String membershipLevel) {
         if (membershipLevel == null) throw new IllegalArgumentException("Membership Level must be set");
         membershipLevel = membershipLevel.trim();
@@ -98,6 +108,19 @@ public class Customer {
         return 0.0;
     }
 
+    @Override
+    public double turnBack(Sale sale, Product product, int qty) {
+        if (sale == null) throw new IllegalArgumentException("Sale is null");
+        if (product == null) throw new IllegalArgumentException("Product is null");
+        if (qty <= 0) throw new IllegalArgumentException("Quantity must be > 0");
+        if (sale.getCustomerID() != this.customerID) throw new IllegalArgumentException("This sale is not for this customer");
+        double refund = product.getPrice() * qty;
+        if (refund < 0) throw new IllegalArgumentException("Refund must be > 0")
+        product.setStockQuantity(product.getStockQuantity() + qty);
+        this.totalPurchases = (this.totalPurchases - refund);
+        return refund;
+    }
+
     // toString
     @Override
     public String toString() {
@@ -109,3 +132,4 @@ public class Customer {
                 '}';
     }
 }
+

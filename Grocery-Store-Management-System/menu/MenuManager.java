@@ -41,6 +41,7 @@ public class MenuManager implements Menu {
         System.out.println("9. View All Customers");
         System.out.println("10. Create Sale");
         System.out.println("11. View All Sales");
+        System.out.println("12. Return product");
         System.out.println("0. Exit");
         System.out.println("========================================");
         System.out.print("Enter your choice: ");
