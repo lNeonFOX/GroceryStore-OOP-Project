@@ -1,7 +1,5 @@
 package model;
 
-import exception.InvalidInputException;
-
 public class Customer implements turnback {
     protected int customerID;
     protected String fullName;
@@ -115,7 +113,7 @@ public class Customer implements turnback {
         if (qty <= 0) throw new IllegalArgumentException("Quantity must be > 0");
         if (sale.getCustomerID() != this.customerID) throw new IllegalArgumentException("This sale is not for this customer");
         double refund = product.getPrice() * qty;
-        if (refund < 0) throw new IllegalArgumentException("Refund must be > 0")
+        if (refund < 0) throw new IllegalArgumentException("Refund must be > 0");
         product.setStockQuantity(product.getStockQuantity() + qty);
         this.totalPurchases = (this.totalPurchases - refund);
         return refund;
