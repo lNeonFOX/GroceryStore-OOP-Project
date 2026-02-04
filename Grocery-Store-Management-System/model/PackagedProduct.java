@@ -14,7 +14,7 @@ public class PackagedProduct extends Product {
 
     public void setWeightKg(double weightKg) {
         if (weightKg <= 0) {
-            throw new IllegalArgumentException("Weght cannot be negative!");
+            throw new IllegalArgumentException("Weight cannot be negative!");
         }
         this.weightKg = weightKg;
     }

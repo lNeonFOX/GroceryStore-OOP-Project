@@ -1,49 +1,55 @@
 package menu;
 
 import model.*;
+import database.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuManager implements Menu {
-    static Scanner scanner = new Scanner(System.in);
-    private static ArrayList<Product> inventory = new ArrayList<>();
-    private static ArrayList<Customer> customers = new ArrayList<>();
-    private static ArrayList<Sale> sales = new ArrayList<>();
+    private Scanner scanner;
+    private ProductDAO productDAO;
 
     public MenuManager() {
-        System.out.println("=== Grocery Store Management System ===\n");
+        this.scanner = new Scanner(System.in);
+        this.productDAO = new ProductDAO();
 
-        //objects
-        inventory.add(new BasicProduct(100, "Sugar", 450.0, 20, "Baking"));
-        inventory.add(new FreshProduct(101, "Milk 1L", 550.0, 10, "Dairy", 2, true));
-        inventory.add(new PackagedProduct(102, "Pasta", 600.0, 15, "Grocery", 1.0));
-
-        customers.add(new Customer(1, "Aruzhan S.", "Regular", 12000.0, 10));
-        customers.add(new Customer(2, "Daria A", "Gold", 100000.0, 200));
-
-        sales.add(new Sale(9000, 1, 2.0, "2026-09.01", "OPEN"));
+        System.out.println("\n╔════════════════════════════════════════╗");
+        System.out.println("║  RESTAURANT MANAGEMENT SYSTEM v2.0    ║");
+        System.out.println("║  Week 8: Fully Database-Driven 🗄️     ║");
+        System.out.println("╚════════════════════════════════════════╝");
+        System.out.println("✅ All data is stored in PostgreSQL");
+        System.out.println("✅ No in-memory ArrayLists");
+        System.out.println("✅ Complete CRUD operations");
     }
 
     @Override
     public void displayMenu() {
         System.out.println("\n========================================");
         System.out.println(" GROCERY STORE MANAGEMENT SYSTEM");
-        System.out.println("========================================");
-        System.out.println("1. Add BasicProduct");
-        System.out.println("2. Add FreshProduct");
-        System.out.println("3. Add Packaged Product");
-        System.out.println("4. View All Products (polymorphism)");
-        System.out.println("5. View FreshProducts Only");
-        System.out.println("6. View PackagedProducts Only");
-        System.out.println("7. Demonstrate Polymorphism (handle())");
-        System.out.println("----------------------------------------");
-        System.out.println("8. Add Customer");
-        System.out.println("9. View All Customers");
-        System.out.println("10. Create Sale");
-        System.out.println("11. View All Sales");
-        System.out.println("12. Return product");
-        System.out.println("0. Exit");
-        System.out.println("========================================");
+        System.out.println("┌─ PRODUCT MANAGEMENT ───────────────────┐");
+        System.out.println("│1. Add BasicProduct                     │");
+        System.out.println("│2. Add FreshProduct                     │");
+        System.out.println("│3. Add Packaged Product                 │");
+        System.out.println("│4. View All Products (polymorphism)     │");
+        System.out.println("│5. View FreshProducts Only              │");
+        System.out.println("│6. View PackagedProducts Only           │");
+        System.out.println("│7. Update Product                       │");
+        System.out.println("│8. Delete Product                       │");
+        System.out.println("├─ SEARCH & FILTER ──────────────────────┤");
+        System.out.println("│ 9. Search by Name                      │");
+        System.out.println("│ 10. Search by Price Range              │");
+        System.out.println("│ 11. Search by Min Price                │");
+        System.out.println("├─ CUSTOMER AND SALE MANAGEMENT ─────────┤");
+        System.out.println("12. Add Customer                         │");
+        System.out.println("13. View All Customers                   │");
+        System.out.println("14. Create Sale                          │");
+        System.out.println("15. View All Sales                       │");
+        System.out.println("├─ DEMO & OTHER ─────────────────────────┤");
+        System.out.println("│16. Polymorphism Demo                   │");
+        System.out.println("│17. Return product                      │");
+        System.out.println("│0. Exit                                 │");
+        System.out.println("└────────────────────────────────────────┘");
         System.out.print("Enter your choice: ");
     }
 
@@ -59,7 +65,7 @@ public class MenuManager implements Menu {
 
                 switch (choice) {
                     case 1:
-                        addParentProduct();
+                        addBasicProduct();
                         break;
                     case 2:
                         addFreshProduct();
@@ -77,20 +83,39 @@ public class MenuManager implements Menu {
                         viewPackagedOnly();
                         break;
                     case 7:
-                        demonstratePolymorphism();
+                        updateProduct();
                         break;
                     case 8:
-                        addCustomer();
+                        deleteProduct();
                         break;
                     case 9:
-                        viewAllCustomers();
+                        searchByName();
                         break;
                     case 10:
-                        createSale();
+                        searchByPriceRange();
                         break;
                     case 11:
+                        searchByMinPrice();
+                        break;
+                    case 12:
+                        addCustomer();
+                        break;
+                    case 13:
+                        viewAllCustomers();
+                        break;
+                    case 14:
+                        createSale();
+                        break;
+                    case 15:
                         viewAllSales();
                         break;
+                    case 16:
+                        demonstratePolymorphism();
+                        break;
+                    case 17:
+                        returnProduct;
+                        break;
+
                     case 0:
                         System.out.println("\nGoodbye! ");
                         running = false;
@@ -98,15 +123,18 @@ public class MenuManager implements Menu {
                     default:
                         System.out.println("\n Invalid choice!");
                 }
+            } catch (java.util.InputMismatchException e) {
+                System.out.println(" Error: Please enter a valid number!");
+                scanner.nextLine();
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                System.out.println(" Error: " + e.getMessage());
                 scanner.nextLine();
             }
         }
         scanner.close();
     }
 
-    private void addParentProduct() {
+    private void addBasicProduct() {
         try {
             System.out.print("Enter product ID ");
             int productID = scanner.nextInt();
@@ -126,7 +154,7 @@ public class MenuManager implements Menu {
             String category = scanner.nextLine();
 
             Product p = new BasicProduct(productID, name, price, stockQuantity, category);
-            inventory.add(p);
+            productDAO.insertProduct(p);
             System.out.println("Basic Product added!");
         } catch (IllegalArgumentException e) {
             System.out.println("NO" + e.getMessage());
@@ -159,7 +187,7 @@ public class MenuManager implements Menu {
             boolean refrigerated = scanner.nextBoolean();
 
             Product p = new FreshProduct(productID, name, price, stockQuantity, category, daysToExpire, refrigerated);
-            inventory.add(p);
+            productDAO.insertProduct(p);
             System.out.println("Fresh Product added!");
         } catch (IllegalArgumentException e) {
             System.out.println("NO" + e.getMessage());
@@ -189,7 +217,7 @@ public class MenuManager implements Menu {
             double weightKg = scanner.nextDouble();
 
             Product p = new PackagedProduct(productID, name, price, stockQuantity, category, weightKg);
-            inventory.add(p);
+            productDAO.insertProduct(p);
             System.out.println("\nPackaged product added successfully!");
         } catch (IllegalArgumentException e) {
             System.out.println("NO" + e.getMessage());
@@ -197,46 +225,21 @@ public class MenuManager implements Menu {
     }
 
     private void viewAllProducts() {
-        System.out.println("\n========================================");
-        System.out.println(" ALL PRODUCTS");
-        System.out.println("========================================");
-
-        if (inventory.isEmpty()) {
-            System.out.println("No products found.");
-            return;
-        }
-
-        System.out.println("Total products: " + inventory.size());
-        System.out.println();
-
-        for (int i = 0; i < inventory.size(); i++) {
-            Product p = inventory.get(i);
-
-            System.out.println((i + 1) + ". " + p.getName() + "- " + p.getPrice());
-            System.out.println(" Category: " + p.getCategory());
-            System.out.println(" Available: " + p.getStockQuantity());
-            if (p instanceof FreshProduct) {
-                FreshProduct fp = (FreshProduct) p;
-                System.out.println("   Days to expire: " + fp.getDaysToExpire());
-            } else if (p instanceof PackagedProduct) {
-                PackagedProduct pp = (PackagedProduct) p;
-                System.out.println("   Weight (kg): " + pp.getWeightKg());
-            }
-            System.out.println();
-        }
+        productDAO.displayAllProducts();
     }
 
     private void viewFreshOnly() {
+        List<Product> freshProducts = productDAO.getFreshProducts();
+
         System.out.println("\n--- FRESH PRODUCTS ONLY ---");
-        int count = 0;
-        for (Product p : inventory) {
-            if (p instanceof FreshProduct) {
-                count++;
-                System.out.println(count + ". " + p);
-            }
+        if (freshProducts.isEmpty()) {
+            System.out.println("No fresh products in Database");
+        } else {
+            for (int i = 0; i < freshProducts.size(); i++)
+            Product p = freshProducts.get(i);
+            System.out.println(i + 1 + ". " + Pr);
         }
-        if (count == 0) System.out.println("No fresh products found.");
-    }
+        }
 
     private static void viewPackagedOnly() {
         System.out.println("\n--- PACKAGED PRODUCTS ONLY ---");
