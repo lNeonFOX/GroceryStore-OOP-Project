@@ -41,8 +41,7 @@ public class MenuManager implements Menu {
         System.out.println("│ 10. Search by Price Range              │");
         System.out.println("│ 11. Search by Min Price                │");
         System.out.println("├─ DEMO & OTHER ─────────────────────────┤");
-        System.out.println("│16. Polymorphism Demo                   │");
-        System.out.println("│17. Return product                      │");
+        System.out.println("│12. Polymorphism Demo                   │");
         System.out.println("│0. Exit                                 │");
         System.out.println("└────────────────────────────────────────┘");
         System.out.print("Enter your choice: ");
@@ -214,7 +213,7 @@ public class MenuManager implements Menu {
         System.out.println("\n--- FRESH PRODUCTS ONLY ---");
         if (freshProducts.isEmpty()) {
             System.out.println("No fresh products in Database");
-            return; // ок, просто выходим из метода
+            return;
         }
 
         for (int i = 0; i < freshProducts.size(); i++) {
